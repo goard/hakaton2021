@@ -6,6 +6,7 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
+import { useAuthHook } from "../hook/auth.hook";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -19,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
 const Login = () => {
   const classes = useStyles();
   const [form, setForm] = useState({ email: "", password: "" });
+  const { loading, login } = useAuthHook();
 
   const changeHandler = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
@@ -27,6 +29,11 @@ const Login = () => {
   const submitHandler = async (event) => {
     event.preventDefault();
     console.log(form);
+    try {
+      await login({ ...form });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -64,6 +71,7 @@ const Login = () => {
             variant="contained"
             color="primary"
             className={classes.submit}
+            disabled={loading}
           >
             Войти
           </Button>

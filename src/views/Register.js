@@ -6,6 +6,8 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Link from "@material-ui/core/Link";
+import { useAuthHook } from "../hook/auth.hook";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -24,15 +26,20 @@ const Register = () => {
     email: "",
     password: "",
   });
+  const { loading, register } = useAuthHook();
 
   const changeHandler = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
   };
 
-  const submitHandler = async(event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
-
-  }
+    try {
+      await register(form);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -86,10 +93,15 @@ const Register = () => {
             label="Пароль"
           />
           <FormControlLabel
-            control={<Checkbox value="allowExtraEmails" color="primary" />}
+            control={
+              <Checkbox required value="allowExtraEmails" color="primary" />
+            }
             label={
               <Typography variant="body2">
-                Согласия на обработку персональных данных
+                Я согласен с условиями{" "}
+                <Link href="#" to="">
+                  пользовательского соглашения
+                </Link>
               </Typography>
             }
           />
@@ -99,6 +111,7 @@ const Register = () => {
             variant="contained"
             color="primary"
             className={classes.submit}
+            disabled={loading}
           >
             Зарегистрироваться
           </Button>
