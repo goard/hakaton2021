@@ -18,7 +18,7 @@ const Routes = () => {
       />
       <RouteWithLayout exact path="/home" component={Home} layout={Minimal} />
       <RouteWithLayout exact patch="/" component={Public} layout={Minimal} />
-      {/* <Redirect exact to="/" /> */}
+      <Redirect exact to="/" />
     </Switch>
   );
 };
